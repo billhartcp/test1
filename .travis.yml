@@ -23,6 +23,6 @@ jobs:
     - stage: deployment
       if: branch = prod
       script:
-      - export VERSION=`cat version.txt'
+      - export VERSION=`cat version.txt'`
       - echo "Deploying to Production"
       # Do anything further to deploy to K8s stack.
