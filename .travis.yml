@@ -1,22 +1,16 @@
-sudo: required
+dist: trusty
 
-service:
-  - docker
-
-branches:
-  only:
-  - dev
-
-env:
-  global:
-  - VERSION=`cat version.txt`
-
-before_install:
-  - envsubst < "./index.temp" > "./index.html"
-  - docker build -t local/apachetest:$VERSION .
-
-deploy:
-  provider: script
-  script: bash push.sh
-  on:
-    branch: dev  
+jobs:
+  include:
+    - stage: build and push docker image
+      script:
+      - export VERSION=`cat version.txt`
+      - envsubst < "./index.temp" > "./index.html" 
+      - echo "$DOCKER_PW" | docker login -u "$DOCKER_LOGIN" --password-stdin
+      - docker build -t local/apachetest:$VERSION .
+      - docker images
+      - docker tag local/apachetest:$VERSION crownpeak/apachetest:$VERSION
+      - docker push crownpeak/apachetest:$VERSION
+    - stage: test
+      script: docker run --rm crownpeak/apachetest:$VERSION -p 80:80
+    - script: docker run --rm crownpeak/apachetest:$VERSION -p 80:80
