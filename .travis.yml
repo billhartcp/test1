@@ -21,7 +21,7 @@ jobs:
       - sleep 10
       - curl http://localhost:80
     - stage: deployment
-      if: branche = prod
+      if: branch = prod
       script:
       - export VERSION=`cat version.txt'
       - echo "Deploying to Production"
