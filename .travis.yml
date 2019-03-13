@@ -12,7 +12,6 @@ env:
   - VERSION=`cat version.txt`
 
 before_install:
-  - 
   - envsubst < "./index.temp" > "./index.html"
   - docker build -t local/apachetest:$VERSION .
 
