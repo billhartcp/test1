@@ -12,9 +12,11 @@ jobs:
       - docker tag local/apachetest:$VERSION crownpeak/apachetest:$VERSION
       - docker push crownpeak/apachetest:$VERSION
     - stage: test
+      if: branch = dev
       script:
       - export VERSION=`cat version.txt`
       - echo "$DOCKER_PW" | docker login -u "$DOCKER_LOGIN" --password-stdin
       - docker pull crownpeak/apachetest:$VERSION 
       - docker run -d -p 80:80 crownpeak/apachetest:$VERSION
-      - curl localhost:80
+      - sleep 10
+      - curl http://localhost:80
