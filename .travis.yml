@@ -1,0 +1,22 @@
+dist: trusty
+
+jobs:
+  include:
+    - stage: build and push docker image
+      script:
+      - export VERSION=`cat version.txt`
+      - envsubst < "./index.temp" > "./index.html" 
+      - echo "$DOCKER_PW" | docker login -u "$DOCKER_LOGIN" --password-stdin
+      - docker build -t local/apachetest:$TRAVIS_BRANCH-$VERSION .
+      - docker images
+      - docker tag local/apachetest:$VERSION crownpeak/apachetest:$VERSION
+      - docker push crownpeak/apachetest:$TRAVIS_BRANCH-$VERSION
+    - stage: test
+      if: branch = dev
+      script:
+      - export VERSION=`cat version.txt`
+      - echo "$DOCKER_PW" | docker login -u "$DOCKER_LOGIN" --password-stdin
+      - docker pull crownpeak/apachetest:$VERSION 
+      - docker run -d -p 80:80 crownpeak/apachetest:$TRAVIS_BRANCH-$VERSION
+      - sleep 10
+      - curl http://localhost:80
