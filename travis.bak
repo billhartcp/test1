@@ -1,0 +1,22 @@
+sudo: required
+
+service:
+  - docker
+
+branches:
+  only:
+  - dev
+
+env:
+  global:
+  - VERSION=`cat version.txt`
+
+before_install:
+  - envsubst < "./index.temp" > "./index.html"
+  - docker build -t local/apachetest:$VERSION .
+
+deploy:
+  provider: script
+  script: bash push.sh
+  on:
+    branch: dev  
