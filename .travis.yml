@@ -14,6 +14,7 @@ jobs:
     - stage: test
       script:
       - export VERSION=`cat version.txt`
+      - echo "$DOCKER_PW" | docker login -u "$DOCKER_LOGIN" --password-stdin
       - docker pull crownpeak/apachetest:$VERSION 
       - docker run -d -p 80:80 crownpeak/apachetest:$VERSION
       - curl localhost:80
