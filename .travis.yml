@@ -12,5 +12,6 @@ jobs:
       - docker tag local/apachetest:$VERSION crownpeak/apachetest:$VERSION
       - docker push crownpeak/apachetest:$VERSION
     - stage: test
-      script: docker run --rm crownpeak/apachetest:$VERSION -p 80:80
-    - script: docker run --rm crownpeak/apachetest:$VERSION -p 80:80
+      script: 
+      - docker run -d -p 80:80 crownpeak/apachetest:$VERSION
+      - curl localhost:80

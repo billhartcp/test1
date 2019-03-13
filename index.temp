@@ -221,14 +221,14 @@
 
         <div class="section_header section_header_red">
           <div id="about"></div>
-          It works!
+          Crownpeak PoC Apache Test Version: $VERSION
         </div>
         <div class="content_section_text">
           <p>
                 This is the default welcome page used to test the correct 
                 operation of the Apache2 server after installation on Ubuntu systems.
                 It is based on the equivalent page on Debian, from which the Ubuntu Apache
-                packaging is derived. This is Crownpeak Dev Version: $VERSION
+                packaging is derived. <b>This is Crownpeak Dev Version: $VERSION</b> 
                 If you can read this page, it means that the Apache HTTP server installed at
                 this site is working properly. You should <b>replace this file</b> (located at
                 <tt>/var/www/html/index.html</tt>) before continuing to operate your HTTP server.
