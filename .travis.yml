@@ -13,6 +13,7 @@ jobs:
       - docker push crownpeak/apachetest:$VERSION
     - stage: test
       script:
-      - export VERSION=`cat version.txt` 
+      - export VERSION=`cat version.txt`
+      - docker pull crownpeak/apachetest:$VERSION 
       - docker run -d -p 80:80 crownpeak/apachetest:$VERSION
       - curl localhost:80
