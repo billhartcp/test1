@@ -1,11 +1,11 @@
-language: ruby
+sudo: required
+
+service:
+  - docker
 
 branches:
   only:
   - dev
-
-services:
-  - docker
 
 env:
   global:
