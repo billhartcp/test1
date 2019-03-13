@@ -9,7 +9,7 @@ jobs:
       - echo "$DOCKER_PW" | docker login -u "$DOCKER_LOGIN" --password-stdin
       - docker build -t local/apachetest:$TRAVIS_BRANCH-$VERSION .
       - docker images
-      - docker tag local/apachetest:$VERSION crownpeak/apachetest:$VERSION
+      - docker tag local/apachetest:$TRAVIS_BRANCH-$VERSION crownpeak/apachetest:$TRAVIS_BRANCH-$VERSION
       - docker push crownpeak/apachetest:$TRAVIS_BRANCH-$VERSION
     - stage: test
       if: branch = dev
