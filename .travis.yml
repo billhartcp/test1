@@ -22,7 +22,6 @@ jobs:
       - curl http://localhost:80
     - stage: deployment
       if: branch = prod
-      script:
-      - export VERSION=`cat version.txt'`
-      - echo "Deploying to Production"
+      - provider: script:
+        script: bash setk8s.sh
       # Do anything further to deploy to K8s stack.
