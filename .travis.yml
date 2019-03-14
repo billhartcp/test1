@@ -12,6 +12,7 @@ jobs:
       - docker tag local/apachetest:$TRAVIS_BRANCH-$VERSION crownpeak/apachetest:$TRAVIS_BRANCH-$VERSION
       - docker push crownpeak/apachetest:$TRAVIS_BRANCH-$VERSION
     - stage: test
+      # Only run the test stage if the branch is development
       if: branch = dev
       script:
       - export VERSION=`cat version.txt`
