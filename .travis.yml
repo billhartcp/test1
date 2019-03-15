@@ -21,6 +21,7 @@ jobs:
       - sleep 10
       - curl http://localhost:80
     - stage: deployment
+      # Only deploy if this is production
       if: branch = prod
       - provider: script:
         script: bash setk8s.sh
