@@ -23,11 +23,6 @@ jobs:
     - stage: deployment
       # Only deploy if this is production
       if: branch = prod
-      script: 
-      - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-      - chmod +x ./kubectl
-      - sudo mv ./kubectl /usr/local/bin/kubectl
-      - mkdir ${HOME}/.kube
-      - cp config ${HOME}/.kube/config
-      - kubectl version    
+      # - provider: script:
+      script: bash setk8s.sh
       # Do anything further to deploy to K8s stack.
