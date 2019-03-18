@@ -16,7 +16,7 @@ jobs:
       script:
       - export VERSION=`cat version.txt`
       - echo "$DOCKER_PW" | docker login -u "$DOCKER_LOGIN" --password-stdin
-      - docker pull crownpeak/apachetest:$VERSION 
+      - docker pull crownpeak/apachetest:$TRAVIS_BRANCH-$VERSION 
       - docker run -d -p 80:80 crownpeak/apachetest:$TRAVIS_BRANCH-$VERSION
       - sleep 10
       - curl http://localhost:80
