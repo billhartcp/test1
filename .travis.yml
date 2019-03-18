@@ -43,5 +43,4 @@ jobs:
       - kubectl delete deployment.apps/apachetest
       - kubectl create -f apachetest-deployment.yaml
       - kubectl create -f apachetest-service.yaml
-      - kubectl cluster-info dump    
       # Do anything further to deploy to K8s stack.
