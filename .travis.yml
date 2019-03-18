@@ -5,7 +5,7 @@ jobs:
     - stage: build and push docker image
       script:
       - export VERSION=`cat version.txt`
-      - envsubst < "./index.temp" > "./index.html"
+      - envsubst < "./index.temp" > "./index.html" 
       - echo "$DOCKER_PW" | docker login -u "$DOCKER_LOGIN" --password-stdin
       - docker build -t local/apachetest:$TRAVIS_BRANCH-$VERSION .
       - docker images
@@ -16,13 +16,31 @@ jobs:
       script:
       - export VERSION=`cat version.txt`
       - echo "$DOCKER_PW" | docker login -u "$DOCKER_LOGIN" --password-stdin
-      - docker pull crownpeak/apachetest:$VERSION
+      - docker pull crownpeak/apachetest:$VERSION 
       - docker run -d -p 80:80 crownpeak/apachetest:$TRAVIS_BRANCH-$VERSION
       - sleep 10
       - curl http://localhost:80
     - stage: deployment
+      # Only deploy if this is production
       if: branch = prod
-      script:
-      - export VERSION=`cat version.txt'`
-      - echo "Deploying to Production"
+      script: 
+      - export VERSION=`cat version.txt`
+      - export DOCKER_REGISTRY_SERVER=https://index.docker.io/v1/
+      - export DOCKER_EMAIL=bill.hart@crownpeak.com
+        #- echo "$DOCKER_PW" | docker login -u "$DOCKER_LOGIN" --password-stdin
+      - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl
+      - sudo mv ./kubectl /usr/local/bin/kubectl
+      - mkdir ${HOME}/.kube
+      - cp config ${HOME}/.kube/config
+      - kubectl config set clusters.kubernetes.certificate-authority-data "$KUBE_CLUSTER_CERTIFICATE"
+      - kubectl config set users.kubernetes-admin.client-certificate-data "$KUBE_CLIENT_CERTIFICATE"
+      - kubectl config set users.kubernetes-admin.client-key-data "$KUBE_CLIENT_KEY"
+      - envsubst < "./apachetest-deployment.temp" > "./apachetest-deployment.yaml"
+      - kubectl delete secret myregistrykey
+      - kubectl create secret docker-registry myregistrykey --docker-server=https://index.docker.io/v1/ --docker-username="$DOCKER_LOGIN" --docker-password="$DOCKER_PW" --docker-email="$DOCKER_EMAIL"
+      - kubectl delete service/apachetest
+      - kubectl delete deployment.apps/apachetest
+      - kubectl create -f apachetest-deployment.yaml
+      - kubectl create -f apachetest-service.yaml
       # Do anything further to deploy to K8s stack.
