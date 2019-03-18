@@ -36,5 +36,5 @@ jobs:
       - envsubst < "./apachetest-deployment.temp" > "./apachetest-deployment.yaml"
       - kubectl create -f apachetest-deployment.yaml
       - kubectl create -f apachetest-service.yaml
-      - kubectl version    
+      - kubectl cluster-info dump    
       # Do anything further to deploy to K8s stack.
