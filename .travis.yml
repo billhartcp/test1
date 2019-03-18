@@ -25,6 +25,7 @@ jobs:
       if: branch = prod
       script: 
       - export VERSION=`cat version.txt`
+      - echo "$DOCKER_PW" | docker login -u "$DOCKER_LOGIN" --password-stdin
       - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
       - chmod +x ./kubectl
       - sudo mv ./kubectl /usr/local/bin/kubectl
