@@ -37,6 +37,7 @@ jobs:
       - kubectl config set users.kubernetes-admin.client-certificate-data "$KUBE_CLIENT_CERTIFICATE"
       - kubectl config set users.kubernetes-admin.client-key-data "$KUBE_CLIENT_KEY"
       - envsubst < "./apachetest-deployment.temp" > "./apachetest-deployment.yaml"
+      - kubectl delete secret myregistrykey
       - kubectl create secret docker-registry myregistrykey --docker-server=https://index.docker.io/v1/ --docker-username="$DOCKER_LOGIN" --docker-password="$DOCKER_PW" --docker-email="$DOCKER_EMAIL"
       - kubectl delete service/apachetest
       - kubectl delete deployment.apps/apachetest
