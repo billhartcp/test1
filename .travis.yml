@@ -39,8 +39,8 @@ jobs:
       - envsubst < "./apachetest-deployment.temp" > "./apachetest-deployment.yaml"
       - kubectl delete secret myregistrykey
       - kubectl create secret docker-registry myregistrykey --docker-server=https://index.docker.io/v1/ --docker-username="$DOCKER_LOGIN" --docker-password="$DOCKER_PW" --docker-email="$DOCKER_EMAIL"
-      - kubectl delete service/apachetest
-      - kubectl delete deployment.apps/apachetest
-      - kubectl create -f apachetest-deployment.yaml
-      - kubectl create -f apachetest-service.yaml
+        #- kubectl delete service/apachetest
+        #- kubectl delete deployment.apps/apachetest
+      - kubectl apply -f apachetest-deployment.yaml
+      - kubectl apply -f apachetest-service.yaml
       # Do anything further to deploy to K8s stack.
