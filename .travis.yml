@@ -3,6 +3,7 @@ dist: trusty
 jobs:
   include:
     - stage: build and push docker image
+      # This state takes place across all branches
       script:
       - export VERSION=`cat version.txt`
       - envsubst < "./index.temp" > "./index.html" 
@@ -12,6 +13,7 @@ jobs:
       - docker tag local/apachetest:$TRAVIS_BRANCH-$VERSION crownpeak/apachetest:$TRAVIS_BRANCH-$VERSION
       - docker push crownpeak/apachetest:$TRAVIS_BRANCH-$VERSION
     - stage: test
+      # Only test if the branch is dev - in this example, test is just curling the web server page.
       if: branch = dev
       script:
       - export VERSION=`cat version.txt`
@@ -21,7 +23,7 @@ jobs:
       - sleep 10
       - curl http://localhost:80
     - stage: deployment
-      # Only deploy if this is production
+      # Only deploy to K8s stack if this is production
       if: branch = prod
       script: 
       - export VERSION=`cat version.txt`
@@ -39,8 +41,7 @@ jobs:
       - envsubst < "./apachetest-deployment.temp" > "./apachetest-deployment.yaml"
       - kubectl delete secret myregistrykey
       - kubectl create secret docker-registry myregistrykey --docker-server=https://index.docker.io/v1/ --docker-username="$DOCKER_LOGIN" --docker-password="$DOCKER_PW" --docker-email="$DOCKER_EMAIL"
-        #- kubectl delete service/apachetest
-        #- kubectl delete deployment.apps/apachetest
+        #- kubectl delete service/apachetest - Disabled for now. Using kubectl apply
+        #- kubectl delete deployment.apps/apachetest - Disabled for now. Using kubectl apply
       - kubectl apply -f apachetest-deployment.yaml
       - kubectl apply -f apachetest-service.yaml
-      # Do anything further to deploy to K8s stack.
