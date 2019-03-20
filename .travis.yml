@@ -3,7 +3,7 @@ dist: trusty
 jobs:
   include:
     - stage: build and push docker image
-      # This state takes place across all branches
+      # This state takes place in prod, dev or stage branches
       if: branch IN (prod,dev,stage)
       script:
       - export VERSION=`cat version.txt`
