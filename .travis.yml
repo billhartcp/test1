@@ -4,6 +4,7 @@ jobs:
   include:
     - stage: build and push docker image
       # This state takes place across all branches
+      if: branch IN (prod,dev,stage)
       script:
       - export VERSION=`cat version.txt`
       - envsubst < "./index.temp" > "./index.html" 
